@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>KB Boss</title>
+
+    <meta name="keywords" content="HTML5 Template" />
+    <meta name="description" content="Porto - Bootstrap eCommerce Template">
+    <meta name="author" content="SW-THEMES">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+
+    <!-- Plugins CSS File -->
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="/static/style.min.css">
+<link rel="stylesheet" href="http://fortawesome.github.io/Font-Awesome/assets/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+<style>
+    .hd{
+        font-weight: 700;
+        color: black;
+        font-size: large;
+    }
+    .tt{
+        font-weight: 700;
+        color: grey;
+        font-size: 1rem;
+        line-height: 1.2;
+    }
+    .tt1{
+        font-weight: 700;
+        color: grey;
+        font-size: 1.5rem;
+        line-height: 1.2;
+    }
+</style>
+</head>
+
+<body>
+    <div class="page-wrapper">
+
+   <header class="header">
+
+            <div class="header-middle">
+                <div class="container">
+                    <div class="header-left">
+                        <a href="/index" class="logo">
+                            <img src="/static/logo.png" alt="Porto Logo">
+                        </a>
+                    </div><!-- End .header-left -->
+
+                    <div class="header-center">
+                        <div class="header-search">
+                            <a href="#" class="search-toggle" role="button"><i class="icon-magnifier"></i></a>
+                            <form action="#" method="get">
+                                <div class="header-search-wrapper">
+                                    <input type="search" class="form-control" name="q" id="q" placeholder="Search..." required>
+                                    <button class="btn" type="submit"><i class="icon-magnifier"></i></button>
+                                </div><!-- End .header-search-wrapper -->
+                            </form>
+                        </div><!-- End .header-search -->
+                    </div><!-- End .headeer-center -->
+
+                    <div class="header-right">
+                        <button class="mobile-menu-toggler" type="button">
+                            <i class="icon-menu"></i>
+                        </button>
+                        <div class="header-contact">
+                            <span>Call us now</span>
+                            <a href="tel:#"><strong>1800 330 3300</strong></a>
+                        </div><!-- End .header-contact -->
+
+                        
+                    </div><!-- End .header-right -->
+                </div><!-- End .container -->
+            </div><!-- End .header-middle -->
+
+    </header><!-- End .header -->
+  
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="cart-table-container">
+                        <table class="table table-cart">
+                            <thead class="hd">
+                                <tr>
+                                    <th class="product-col">Product</th>
+                                    <th class="price-col">Price</th>
+                                    <th class="qty-col">Qty</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            {% for cart in object.items.all %}
+
+                            <tbody>
+                                <tr class="product-row">
+                                    <td class="product-col">
+                                        <figure class="product-image-container">                                                 
+                                                <a  class="product-image">
+                                                        <img  src="{{ cart.item.image.url }}" >
+                                                    </a>                                       
+                                        </figure>
+                                        <h2 class="tt product-title">
+                                            {{ cart.item.title }}
+                                        </h2>
+                                    </td>
+                                    <td class="tt1">{{ cart.item.price }}</td>
+                                    <td class="tt1">
+                                       <!-- <input class="vertical-quantity form-control" type="text">-->
+                                        <a href="{% url 'Home:remove-single-item-from-cart' cart.item.slug %}"><i class="fas fa-minus"></i></a>
+                                        {{ cart.quantity }}
+                                        <a href="{% url 'Home:add-to-cart' cart.item.slug %}"> <i class="fas fa-plus"></i></a>
+                                    </td>
+                                    <td class="tt1"> {%  if cart.item.discount_price %}
+                                            ${{ cart.get_total_item_discount_price }}
+                                    {% else %}
+                                            ${{ cart.get_total_item_price }}
+                                    {% endif %}
+                                    (Saved ${{ cart.get_savings }})
+                                </td>
+                                </tr>
+                                <tr class="product-action-row">
+                                    <td colspan="4" class="clearfix">
+                                        <div >
+                                            <a href="{%  url 'Home:move-to-wishlist' cart.item.slug %}" class="btn btn-primary">Move to Wishlist</a>
+                                            <a href="{% url 'Home:remove-from-cart' cart.item.slug %}" title="Remove product" class="btn btn-secondary">Remove product</a>
+                                        </div><!-- End .float-right -->
+                                    </td>
+                                </tr>
+                                {% empty %}
+        
+                                    <tr>
+                                        <td colspan="5">
+                                            your cart is empty
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                    <div class="float-left">
+                                        <a href="{% url 'Home:index' %}" class="btn btn-outline-secondary">Continue Shopping</a>
+                                    </div><!-- End .float-left -->
+                                        </td>
+                                    </tr>
+                            {% endfor %}
+                            {% if object.order_total  %}
+                            <tr>
+                                <td colspan="4" class="clearfix">
+                                    <div class="float-left">
+                                        <a href="{% url 'Home:index' %}" class="btn btn-outline-secondary">Continue Shopping</a>
+                                    </div><!-- End .float-left -->
+
+                                    <div class="float-right">
+                                       
+                                        <a href="{% url 'Home:empty_cart' %}" class="btn btn-danger" >Clear Shopping Cart</a>
+                                        <a href="#" class="btn btn-outline-secondary btn-update-cart" >Update Shopping Cart</a>
+                                    </div><!-- End .float-right -->
+                                </td>
+                            </tr>
+                            {% endif %}
+                                                           </tbody>
+
+                            <tfoot>
+                                
+                            </tfoot>
+                        </table>
+                    </div><!-- End .cart-table-container -->
+                    
+                </div><!-- End .col-lg-8 -->
+
+                <div class="col-lg-4">
+                    <div class="cart-summary">
+                        <h3 style="font-weight: 600">Summary</h3>
+
+                        <table class="table table-totals">
+                            <tbody>
+                                <tr>
+                                    <td style="font-weight: 700">Subtotal</td>
+                                    <td style="font-weight: 700">{{ object.order_total_without_code }}</td>
+                                </tr>
+                                {% if object.coupon %}
+                                    <tr>
+                                        <td style="font-weight: 700">Discount</td>
+                                        <td style="font-weight: 700">{{ object.coupon.amount }}</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>Order Total</td>
+                                    <td>{{ object.order_total }}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <div class="checkout-methods">
+                            <a href="/Checkout" class="btn btn-block btn-sm btn-success">Go to Checkout</a>
+                        </div><!-- End .checkout-methods -->
+                    </div><!-- End .cart-summary -->
+                    {% if object.order_total_without_code > 0 %}
+                    <div class="cart-discount">
+                        <h4><b>Apply Discount Code</b></h4>
+                        <form action="{% url 'Home:AddCoupon' %}" method="post">
+                                {% csrf_token %}
+                            <div class="input-group">
+                                <!--<input type="text" class="form-control form-control-sm" placeholder="Enter discount code"  required>
+                                -->
+                                {{ form.coupon }}
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-primary" type="submit">Apply Discount</button>
+                                </div>
+                            </div><!-- End .input-group -->
+                        </form>
+                    </div><!-- End .cart-discount -->
+                    {% endif %}
+                </div><!-- End .col-lg-4 -->
+            </div><!-- End .row -->
+        </div><!-- End .container -->
+       
+
+        <br><br>
+		<footer class="footer">
+            
+            <div class="container">
+                <div class="footer-top">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="widget widget-newsletter">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h4 class="widget-title">Subscribe newsletter</h4>
+                                        <p>Get all the latest information on Events,Sales and Offers. Sign up for newsletter today</p>
+                                    </div><!-- End .col-lg-6 -->
+
+                                    <div class="col-lg-6">
+                                        <form action="#">
+                                            <input type="email" class="form-control" placeholder="Email address" required>
+
+                                            <input type="submit" class="btn" value="Subscribe">
+                                        </form>
+                                    </div><!-- End .col-lg-6 -->
+                                </div><!-- End .row -->
+                            </div><!-- End .widget -->
+                        </div><!-- End .col-md-9 -->
+
+                        <div class="col-md-3 widget-social">
+                            <div class="social-icons">
+                                <a href="#" class="social-icon" target="_blank"><i class="icon-facebook"></i></a>
+                                <a href="#" class="social-icon" target="_blank"><i class="icon-twitter"></i></a>
+                                <a href="#" class="social-icon" target="_blank"><i class="icon-linkedin"></i></a>
+                            </div><!-- End .social-icons -->
+                        </div><!-- End .col-md-3 -->
+                    </div><!-- End .row -->
+                </div><!-- End .footer-top -->
+            </div><!-- End .container -->
+
+            <div class="footer-middle">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="widget">
+                                <h4 class="widget-title">Contact Us</h4>
+                                <ul class="contact-info">
+                                    <li>
+                                        <span class="contact-info-label">Registered Office Address:</span>90,Varahi Society, D'cabin, Sabarmati, Ahmedabad - 380019
+                                    </li>
+                                    <li>
+                                        <span class="contact-info-label">Telephone:</span><a href="tel:">1800 330 3300</a>
+                                    </li>
+                                    <li>
+                                        <span class="contact-info-label">Email:</span>jjkumavat970@gmail.com<a href="mailto:jjkumavat970@gmail.com"></a>
+                                    </li>
+                                </ul>
+                            </div><!-- End .widget -->
+                        </div><!-- End .col-lg-3 -->
+
+
+                        <div class="col-lg-9">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="widget">
+                                        <h4 class="widget-title">HELP</h4>
+
+                                        <div class="row">
+                                            <div class="col-sm-6 col-md-5">
+                                                <ul class="links">
+                                                    <li><a href="about.html">About Us</a></li>
+                                                    <li><a href="contact.html">Contact Us</a></li>
+                                                    <li><a href="my-account.html">FAQ</a></li>
+													<li><a href="my-account.html">Payments</a></li>
+                                                </ul>
+                                            </div><!-- End .col-sm-6 -->
+                                            <div class="col-sm-6 col-md-5">
+                                                <ul class="links">
+                                                    <li><a href="#">Cancellation & Returns</a></li>
+                                                    <li><a href="#">Shipping</a></li>
+                                                </ul>
+                                            </div><!-- End .col-sm-6 -->
+                                        </div><!-- End .row -->
+                                    </div><!-- End .widget -->
+                                </div><!-- End .col-md-5 -->
+
+                                <div class="col-md-7">
+                                    <div class="widget">
+                                        <h4 class="widget-title">POLICY</h4>
+
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <ul class="links">
+                                                    <li><a href="#">Return Policy</a></li>
+                                                    <li><a href="#">Terms Of Use</a></li>
+                                                    <li><a href="#">Privacy</a></li>
+													<li><a href="#">Security</a></li>
+                                                </ul>
+                                            </div><!-- End .col-sm-6 -->
+                                            <div class="col-sm-6">
+                                                <ul class="links">
+                                                    <li><a href="#"><u>24X7 Help Center</u></a></li>
+													open for Queries, Problems
+													and other support related to Porto e-commerce.
+                                                </ul>
+                                            </div><!-- End .col-sm-6 -->
+                                        </div><!-- End .row -->
+                                    </div><!-- End .widget -->
+                                </div><!-- End .col-md-7 -->
+                            </div><!-- End .row -->
+
+
+                            <div class="footer-bottom">
+                                <p class="footer-copyright">Porto eCommerce. &copy;  2018.  All Rights Reserved</p>
+                            </div><!-- End .footer-bottom -->
+                        </div><!-- End .col-lg-9 -->
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .footer-middle -->
+        </footer><!-- End .footer -->
+	</div>
+<script src="/static/jquery.min.js"></script>
+    <script src="/static/bootstrap.bundle.min.js"></script>
+    <script src="/static/plugins.min.js"></script>
+
+    <!-- Main JS File -->
+    <script src="/static/main.min.js"></script>
+	</body>
+	</html>

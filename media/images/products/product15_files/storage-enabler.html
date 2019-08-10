@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<!-- saved from url=(0089)https://mondo.me-tail.net/build/1158/storage-enabler.html?locale=enGB&domain=.me-tail.net -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <title>Metail</title>
+ <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, target-densityDpi=device-dpi">
+ <style type="text/css">
+    body {
+      padding:0;
+      margin:0;
+      font-family: "Gotham Book", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    #content {
+      display: none;
+      transition: all 400ms;
+    }
+    #content.visible {
+      display: block;
+    }
+    #cookie-wrapper {
+      background: #fff;
+      display: none;
+      transition: all 400ms;
+    }
+    #cookie-wrapper.visible {
+      display: block;
+    }
+    .memodel-center {
+      width: 100%;
+      margin: 0 auto;
+      display: block;
+      max-width: 600px;
+      text-align:center;
+    }
+    .memodel-center img {
+      max-width: 420px;
+    }
+    .cookie-copy {
+      max-width: 350px;
+      margin: 20px auto;
+      text-align: center;
+    }
+    .cookie-copy button {
+      border: 0;
+      background-color: #00c4c4;
+      font-size: 25px;
+      padding: 17px 80px;
+      color: #fff;
+      font-weight: 100;
+      margin: 0 auto 15px;
+      width: 350px;
+      text-transform: uppercase;
+    }
+    .overlay-text {
+      line-height: 1.4em;
+    }
+    .no-thanks a {
+      font-size: 22px;
+      color: #000;
+      font-weight: 100;
+    }
+    .with-metail {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      border-top: 1px solid #ccc;
+      text-align: center;
+      padding: 10px 0;
+    }
+    .with-metail img {
+      max-width: 170px;
+    }
+    .title-text {
+      font-size: 2em;
+      text-align:center;
+      margin-top: -147px;
+    }
+
+    @media only screen and (max-device-width: 568px) {
+      .memodel-center img {
+        width: 95%;
+        height: 95%;
+        margin: -30px auto 0;
+      }
+      .cookie-copy button {
+        margin: 0 0 15px;
+        width: 80%;
+      }
+    }
+    /* ----------- iPhone 5 and 5S ----------- */
+    /* Portrait */
+    @media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
+      .memodel-center img {
+        margin: -10px auto 0;
+      }
+      .title-text {
+        margin-top: -138px;
+        font-size: 1.3em;
+      }
+    }
+</style>
+</head>
+<body>
+   <div id="content" class="visible">
+      <p><strong id="please_close_window">Please close this tab/window if it has not closed automatically.</strong></p>
+      <p id="ready_to_use_metail">You're now ready to use the Metail Experience. What are you waiting for? Start trying on looks.</p>
+   </div>
+   <div id="cookie-wrapper">
+      <div class="memodel-center">
+         <img id="mobile-popup-image">
+         <div id="ready_to_try_some_clothes" class="title-text">Ready to try on some looks?</div>
+      </div>
+      <div class="cookie-copy">
+         <a href="https://mondo.me-tail.net/build/1158/storage-enabler.html?locale=enGB&amp;domain=.me-tail.net#"><button id="yes" onclick="javascript:allowMetail();">Yes</button></a>
+         <div class="no-thanks"><a id="no_thanks" href="https://mondo.me-tail.net/build/1158/storage-enabler.html?locale=enGB&amp;domain=.me-tail.net#" onclick="javascript:declineMetail();">No, thanks</a></div>
+      </div>
+      <div class="with-metail">
+         <img id="with-metail-logo">
+      </div>
+   </div>
+
+   <script>
+      function getQueryParameters() {
+         var match,
+            pl = /\+/g,  // Regex for replacing addition symbol with a space
+            search = /([^&=]+)=?([^&]*)/g,
+            decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+            query  = window.location.search.substring(1);
+         var queryParams = {};
+         while (match = search.exec(query)) {
+            queryParams[decode(match[1])] = decode(match[2]);
+         }
+         return queryParams;
+      }
+      var queryParameters = getQueryParameters();
+      var cookieDomain = queryParameters.domain;
+
+      // Why not isiOS? Because the UX for iPhone is more jarring and leaves the user with an unfocused retailer tab. On iPad we can do this action automagaically with the UX being a new tab that opens and closes immediately and focus restored back to the retailer tab.
+      var isIphone = new RegExp("iphone", "i").test(navigator.userAgent);
+      var date = new Date().getTime();
+      var cookieNameValue = "cookie-enabler=" + date;
+      var xStart = null;
+      var yStart = null;
+      var domainPart = "";
+      if (cookieDomain !== "") {
+         domainPart = "domain=" + cookieDomain + ";";
+      }
+      // Cookies have domain=... part when set, but not when read back from document.cookie so we just look for the name/value pair
+      document.cookie = cookieNameValue + ";" + domainPart;
+      var cookiesEnabled = document.cookie.indexOf(cookieNameValue) != -1;
+      var storageEnabled = "metail-storage-disabled";
+      var localStorageEnabled = (function() {
+         try {
+            localStorage["metail-ls-test"] = date;
+            return localStorage["metail-ls-test"] === date.toString();
+         } catch (e) {
+            return false;
+         }
+      })();
+
+      function closeWindow() {
+         window.close();
+         // If window.close() fails it might be because the storage enabler has not opened as a popup.
+         // This can occur if the retailer page is opened through an app like FB or Kakoa on iOS.
+         // In that case we try to redirect the person back to the page they came from.
+         // If close() does work then of course this line is not reached.
+         // Note: It's only safe to do this
+         // a) if we're not an iframe because otherwise we'd end up reloading the parent page in ourself, and
+         // b) if a referrer is actually set else we'll just redirect back to ourself in a loop
+         if (window.self === window.top && document.referrer.length > 0) {
+            window.location = document.referrer;
+         }
+      }
+
+      storageEnabled = cookiesEnabled && localStorageEnabled ? "metail-storage-enabled" : "metail-storage-disabled";
+      (opener || parent).postMessage(storageEnabled, "*");
+      if (!isIphone) {
+         closeWindow();
+      } else {
+         document.querySelector("#cookie-wrapper").className = "visible";
+         document.querySelector("#mobile-popup-image").src = "./img/storage-enabler/mobile-popup-image.jpg";
+         document.querySelector("#with-metail-logo").src = "./img/storage-enabler/with-metail-logo.png";
+      }
+
+      function allowMetail() {
+         closeWindow();
+      }
+
+      function declineMetail() {
+         localStorage.removeItem("metail-ls-test");
+         closeWindow();
+      }
+      // After 1 second show the message, if the window has not closed the user must do it themselves (iOS 8.0 and 8.1 at least)
+      if(!isIphone ) {
+         setTimeout(function(){
+            document.querySelector("#content").className = "visible";
+         }, 1000);
+      }
+
+      var localisations = {
+        koKR: {
+            please_close_window: "자동으로 종료되지 않는 경우  탭 또는 창을 닫아주세요.",
+            ready_to_use_metail: "이제 Metail 서비스를 시작할 수 있습니다. 무엇을 기다리시나요? 의상을 착용해 보세요.",
+            ready_to_try_some_clothes: "의상을 착용해 볼까요?",
+            yes: "네",
+            no_thanks: "괜찮습니다"
+        },
+        ptBR: {
+            please_close_window: "Por favor, feche esta guia/janela caso ela não tenha sido fechada automaticamente.",
+            ready_to_use_metail: "Você agora está pronto para usar a Experiência Metail. O que você está esperando? Comece a experimentar novos visuais",
+            ready_to_try_some_clothes: "Preparada para experimentar alguns visuais?",
+            yes: "Sim",
+            no_thanks: "Não, obrigada"
+        },
+        enGB: {
+            please_close_window: "Please close this tab/window if it has not closed automatically.",
+            ready_to_use_metail: "You're now ready to use the Metail Experience. What are you waiting for? Start trying on looks.",
+            ready_to_try_some_clothes: "Ready to try on some looks?",
+            yes: "Yes",
+            no_thanks: "No, thanks"
+        },
+      };
+      var localisation = localisations[queryParameters.locale];
+      if (!localisation) {
+         localisation = localisations.enGB;
+      }
+      Object.keys(localisation).forEach(function (key) {
+         var element = document.getElementById(key);
+         element.textContent = localisation[key];
+      });
+   </script>
+
+</body></html>

@@ -1,0 +1,134 @@
+{% extends "header.html" %}
+
+{% block header %}
+<br>
+<div class="container">
+    <ul class="checkout-progress-bar">
+        <li class="active">
+            <span>Shipping</span>
+        </li>
+        <li>
+            <span>Review &amp; Payments</span>
+        </li>
+    </ul>
+    <div class="row">
+            
+        <div class="col-lg-8">
+            <ul class="checkout-steps">
+                <li>
+                    <h2 class="step-title">Shipping Address</h2>
+
+                    <form method="POST" >
+                        {% csrf_token %}
+                        <!--<div class="form-group required-field">
+                            <label>First Name </label>
+                            <input type="text" class="form-control" required>
+                        </div><!-- End .form-group -->
+
+                        <!--<div class="form-group required-field">
+                            <label>Last Name </label>
+                            <input type="text" class="form-control" required>
+                        </div><!-- End .form-group -->
+
+                        <!--form-group">
+                            <label>Company </label>
+                            <input type="text" class="form-control">
+                        </div><!-- End .form-group -->
+
+                        <div class="form-group required-field">
+                            <label for="address">Street Address </label>
+                            {{ form.street_address }}
+                        </div><!-- End .form-group -->
+
+                        <div class="form-group ">
+                            <label for="address-2">Street Address 2 </label>
+                            {{ form.apartment_address }}
+                        </div><!-- End .form-group -->
+
+                       <!-- <div class="form-group required-field">
+                            <label>City  </label>
+                            <input type="text" class="form-control" required>
+                        </div><!-- End .form-group -->
+
+                        <!--<div class="form-group">
+                            <label>State/Province</label>
+                            <div class="select-custom">
+                                <select class="form-control">
+                                    <option value="CA">California</option>
+                                    <option value="TX">Texas</option>
+                                </select>
+                            </div><!-- End .select-custom -->
+                        <!--</div><!-- End .form-group -->
+                        <div class="form-group required-field">
+                            <label for="country">Country</label>
+                            {{ form.country }}
+                        </div><!-- End .form-group -->
+
+                        <div class="form-group required-field">
+                            <label for="zip">Zip/Postal Code </label>
+                            {{ form.zip }}
+                        </div><!-- End .form-group -->
+
+                        
+                        <div class="form-group required-field">
+                            <label for="contact">Phone Number </label>
+                            {{ form.contact }}
+                         </div><!-- End .form-group -->
+                        
+                       <div class="d-block my-3">
+                                {% for value, name in form.fields.payment_option.choices %}
+                                <div class="custom-control custom-radio">
+                                  <input id="{{ name }}" name="payment_option" value="{{ value }}" type="radio" class="custom-control-input" required>
+                                  <label class="custom-control-label" for="{{ name }}">{{ name }}</label>
+                                </div>
+                                {% endfor %}
+                              </div>
+                            <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                
+                    </form>
+                </li>
+
+                
+            </ul>
+        </div><!-- End .col-lg-8 -->
+        <div class="col-lg-4">
+                <div class="order-summary">
+                    <h3>Summary</h3>                 
+
+                    <div  id="order-cart-section">
+                        <table class="table table-mini-cart">
+                            <tbody>
+                                    {% for order_item in order.items.all %}
+                                <tr>
+                                    <td class="product-col">
+                                        <figure class="product-image-container">
+                                            <a href="#" class="product-image">
+                                                <img src="{{ order_item.item.image.url }}" alt="product">
+                                            </a>
+                                        </figure>
+                                        <div>
+                                            <h2 class="product-title">
+                                                <a href="product.html">{{ order_item.item.title }}</a>
+                                            </h2>
+
+                                            <span class="product-qty">X<b>{{ order_item.quantity }}</b></span>
+                                        </div>
+                                    </td>
+                                    <td class="price-col">{{ order_item.item.price }}</td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>    
+                        </table>
+                    </div><!-- End #order-cart-section -->
+                </div><!-- End .order-summary -->
+
+                
+
+                
+            </div><!-- End .col-lg-4 -->
+</div>
+</div>
+
+
+
+{% endblock %}

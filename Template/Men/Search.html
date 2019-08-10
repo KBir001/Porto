@@ -1,0 +1,231 @@
+{% extends "header.html" %}
+{% block search %}
+<div class="header-center">
+        <div class="header-search">
+            <form action="{% url 'Home:Search' %}" method="post">
+                    {% csrf_token %}
+                <div class="header-search-wrapper">
+                   {{ search_form.data }}
+                    <button class="btn" type="submit"><i class="icon-magnifier"></i></button>
+                </div><!-- End .header-search-wrapper -->
+            </form>
+        </div><!-- End .header-search -->
+    </div><!-- End .headeer-center -->
+{% endblock search %}
+{% block header %}
+
+         <main class="main">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index-2.html"><i class="icon-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav>
+                <div class="container">
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <div class="row row-md">
+                                        {% for item in object %}
+                                    <div class="col-6 col-md-4">
+                                            
+
+                                        <div class="product">
+                                            <div class="pp">
+                                                    <figure class="product-image-container">
+                                                        <a href="{{item.get_Search_url}}" class="product-image">
+                                                            <img src="{{ item.image.url }}" alt="product">
+                                                        </a>
+                                                        <a href="ajax/product-quick-view.html" class="btn-quickview">Quickview</a>
+                                                    </figure>
+                                            </div>
+                                            <div class="product-details">
+                            
+                                                        <h2 class="product-title">
+                                                            <a href="product.html">{{ item.title }}</a>
+                                                        </h2>
+                                                        <div class="price-box">
+                                                            {% if item.discount_price %}
+                                                            <span class="product-price"><b>${{ item.discount_price }}</b>
+                                                               <span class="discount">{{item.discount_code}}%off</span>
+                                                            </span>
+                                                            {% else %}
+                                                            <span class="product-price">${{ item.price }}
+                                                                <span class="discount">{{item.discount_code}}%off</span>
+                                                            </span>
+                                                            {% endif %}
+                                                    </div><!-- End .price-box -->
+                                                        <div class="product-action">
+                                                            <a href="{% url 'Home:move-to-wishlist' item.slug %}" class="paction add-wishlist" title="Add to Wishlist">
+                                                                <span>Add to Wishlist</span>
+                                                            </a>
+
+                                                            <a href="{{ item.get_add_to_cart_url }}" class="paction add-cart" title="Add to Cart">
+                                                                <span>Add to Cart</span>
+                                                            </a>
+
+                                                            <a href="#" class="paction add-compare" title="Add to Compare">
+                                                                <span>Add to Compare</span>
+                                                            </a>
+                                                        </div><!-- End .product-action -->
+                                             </div><!-- End .product-details -->
+                                </div><!-- End .product -->
+                                 
+                            </div><!-- End .col-md-4 -->
+                            {% endfor %}
+                        </div>
+                        {% if is_paginated %}
+                        <nav class="toolbox toolbox-pagination">
+                            <div class="toolbox-item toolbox-show">
+                                <label>Showing  {{ page_obj.number}} of {{ paginator.num_pages }} results</label>
+                            </div><!-- End .toolbox-item -->
+    
+                            <ul class="pagination">
+                                {% if page_obj.has_previous %}
+                                <li class="page-item ">
+                                    <a class="page-link page-link-btn" href="?page={{ page_obj.previous_page_number }}"><i class="icon-angle-left"></i></a>
+                                </li>
+                                {% endif %}
+                                <li class="page-item active">
+                                    <a class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number}} <span class="sr-only">(current)</span></a>
+                                </li>
+                                {% if page_obj.has_next %}
+                                 <li class="page-item">
+                                    <a class="page-link page-link-btn" href="?page={{ page_obj.next_page_number }}"><i class="icon-angle-right"></i></a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% endif %}
+                    </div>
+
+                    <aside class="sidebar-shop col-lg-3 order-lg-first">
+                            <div class="sidebar-wrapper">
+                                <div class="widget">
+                                    <h3 class="widget-title">
+                                        <a data-toggle="collapse" href="#widget-body-1" role="button" aria-expanded="true" aria-controls="widget-body-1">electronics</a>
+                                    </h3>
+    
+                                    <div class="collapse show" id="widget-body-1">
+                                        <div class="widget-body">
+                                            <ul class="cat-list">
+                                                <li><a href="#">Smart TVs</a></li>
+                                                <li><a href="#">Cameras</a></li>
+                                                <li><a href="#">Head Phones</a></li>
+                                                <li><a href="#">Games</a></li>
+                                            </ul>
+                                        </div><!-- End .widget-body -->
+                                    </div><!-- End .collapse -->
+                                </div><!-- End .widget -->
+    
+                                <div class="widget">
+                                    <h3 class="widget-title">
+                                        <a data-toggle="collapse" href="#widget-body-2" role="button" aria-expanded="true" aria-controls="widget-body-2">Price</a>
+                                    </h3>
+    
+                                    <div class="collapse show" id="widget-body-2">
+                                        <div class="widget-body">
+                                            <form action="{% url 'Home:Tshirt' %}" method="post">
+                                                {% csrf_token %}
+                                            <div>
+                                                {{ price_form.min_price }}
+                                                {{ price_form.max_price }}
+                                                
+                                                <div class="filter-price-action">
+                                                    <button type="submit" class="btn btn-primary">Filter</button>
+    
+                                                </div><!-- End .filter-price-action -->
+                                            </div>
+                                        </form>
+                                        </div><!-- End .widget-body -->
+                                    </div><!-- End .collapse -->
+                                </div><!-- End .widget -->
+    
+                                <div class="widget">
+                                    <h3 class="widget-title">
+                                        <a data-toggle="collapse" href="#widget-body-3" role="button" aria-expanded="true" aria-controls="widget-body-3">Size</a>
+                                    </h3>
+    
+                                    <div class="collapse show" id="widget-body-3">
+                                        <div class="widget-body">
+                                            <ul class="config-size-list">
+                                                <li><a href="#">S</a></li>
+                                                <li class="active"><a href="#">M</a></li>
+                                                <li><a href="#">L</a></li>
+                                                <li><a href="#">XL</a></li>
+                                                <li><a href="#">2XL</a></li>
+                                                <li><a href="#">3XL</a></li>
+                                            </ul>
+                                        </div><!-- End .widget-body -->
+                                    </div><!-- End .collapse -->
+                                </div><!-- End .widget -->
+    
+                                <div class="widget">
+                                    <h3 class="widget-title">
+                                        <a data-toggle="collapse" href="#widget-body-4" role="button" aria-expanded="true" aria-controls="widget-body-4">Brands</a>
+                                    </h3>
+    
+                                    <div class="collapse show" id="widget-body-4">
+                                        <div class="widget-body">
+                                            <ul class="cat-list">
+                                                <li><a href="#">Adidas <span>18</span></a></li>
+                                                <li><a href="#">Camel <span>22</span></a></li>
+                                                <li><a href="#">Seiko <span>05</span></a></li>
+                                                <li><a href="#">Samsung Galaxy <span>68</span></a></li>
+                                                <li><a href="#">Sony <span>03</span></a></li>
+                                            </ul>
+                                        </div><!-- End .widget-body -->
+                                    </div><!-- End .collapse -->
+                                </div><!-- End .widget -->
+    
+                                <div class="widget">
+                                    <h3 class="widget-title">
+                                        <a data-toggle="collapse" href="#widget-body-6" role="button" aria-expanded="true" aria-controls="widget-body-6">Color</a>
+                                    </h3>
+    
+                                    <div class="collapse show" id="widget-body-6">
+                                        <div class="widget-body">
+                                            <ul class="config-swatch-list">
+                                                <li>
+                                                    <a href="#" style="background-color: #4090d5;"></a>
+                                                </li>
+                                                <li class="active">
+                                                    <a href="#" style="background-color: #f5494a;"></a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" style="background-color: #fca309;"></a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" style="background-color: #11426b;"></a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" style="background-color: #f0f0f0;"></a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" style="background-color: #3fd5c9;"></a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" style="background-color: #979c1c;"></a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" style="background-color: #7d5a3c;"></a>
+                                                </li>
+                                            </ul>
+                                        </div><!-- End .widget-body -->
+                                    </div><!-- End .collapse -->
+                                </div><!-- End .widget -->
+    
+                                
+                                
+                            </div><!-- End .sidebar-wrapper -->
+                        </aside><!-- End .col-lg-3 -->
+                </div>
+            </div>
+
+        </main><!-- End .main -->
+
+
+
+   {%  endblock header%}
+<!-- End .mobile-menu-container -->
